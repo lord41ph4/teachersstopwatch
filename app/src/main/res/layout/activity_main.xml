@@ -6,36 +6,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3"
+        android:weightSum="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="minutesInput,divider,secondsInput"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/repeatInput"
+            app:layout_constraintStart_toStartOf="@+id/minutesInput"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <NumberPicker
             android:id="@+id/minutesInput"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/divider" />
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center|center_horizontal"
+            android:text=":"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/minutesInput"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <NumberPicker
             android:id="@+id/secondsInput"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            app:layout_constraintStart_toEndOf="@+id/divider"
+            app:layout_constraintTop_toTopOf="@+id/divider" />
 
         <NumberPicker
             android:id="@+id/repeatInput"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/secondsInput"
+            app:layout_constraintTop_toTopOf="@+id/secondsInput" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/countdown"
@@ -64,11 +89,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/start"
+        android:id="@+id/start_button"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:drawableTop="@drawable/ic_alarm"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:background="@drawable/oval"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
