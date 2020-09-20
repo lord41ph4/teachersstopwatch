@@ -16,41 +16,67 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.Group
-            android:id="@+id/group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:constraint_referenced_ids="minutesInput,divider,secondsInput"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/repeatInput"
-            app:layout_constraintStart_toStartOf="@+id/minutesInput"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/group"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:constraint_referenced_ids="minutesInput,divider,secondsInput"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/repeatInput"
+                app:layout_constraintStart_toStartOf="@+id/minutesInput"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.0"/>
+        <TextView
+                android:id="@+id/minutesLabel"
+                android:labelFor="@id/minutesInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                android:text="@string/minutes"
+                app:layout_constraintStart_toStartOf="@+id/group" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toStartOf="@+id/divider"/>
 
         <NumberPicker
-            android:id="@+id/minutesInput"
-            android:theme="@style/NumberPickerText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/divider" />
+                android:id="@+id/minutesInput"
+                android:theme="@style/NumberPickerText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/minutesLabel"/>
 
         <TextView
-            android:id="@+id/divider"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center|center_horizontal"
-            android:text=":"
-            android:textSize="36sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/minutesInput"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/divider"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center|center_horizontal"
+                android:text="@string/dividerSign"
+                android:textSize="36sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/minutesInput"
+                app:layout_constraintTop_toTopOf="@+id/minutesInput"/>
+
+        <TextView
+                android:id="@+id/secondsLabel"
+                android:labelFor="@id/secondsInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                android:text="@string/seconds"
+                app:layout_constraintStart_toStartOf="@+id/secondsInput" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="@+id/secondsInput"/>
 
         <NumberPicker
-            android:id="@+id/secondsInput"
-            android:theme="@style/NumberPickerText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/divider"
-            app:layout_constraintTop_toTopOf="@+id/divider" />
+                android:id="@+id/secondsInput"
+                android:theme="@style/NumberPickerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/divider"
+                app:layout_constraintTop_toBottomOf="@+id/secondsLabel"/>
+
+        <TextView
+                android:id="@+id/repeatLabel"
+                android:labelFor="@id/repeatInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                android:text="@string/repeats"
+                app:layout_constraintStart_toStartOf="@+id/repeatInput" app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
 
         <NumberPicker
             android:id="@+id/repeatInput"

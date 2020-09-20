@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">Teachers Stopwatch</string>
+  <string name="minutes">Minutes</string>
+  <string name="seconds">Seconds</string>
+  <string name="repeats">Repeats</string>
+  <string name="dividerSign">:</string>
 </resources>
