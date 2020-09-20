@@ -1,9 +1,11 @@
 package de.alpha_zone.teachersstopwatch
 
+import android.app.AlarmManager
 import android.content.Context
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
@@ -21,7 +23,11 @@ class CountDownSchedulerTest {
 		val countDown = CountDown(20.toDuration(DurationUnit.SECONDS), 3)
 		countDown.start()
 		val scheduler = CountDownScheduler(countDown)
-		scheduler.schedule(mock(Context::class.java))
+		val context = mock(Context::class.java)
+		Mockito.`when`(context.getSystemService(Context.ALARM_SERVICE)).thenAnswer { invocation ->
+			mock(AlarmManager::class.java)
+		}
+		scheduler.schedule(context)
 		assertThat(scheduler.hasScheduledTasks, `is`(true))
 	}
 

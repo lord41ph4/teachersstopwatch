@@ -1,9 +1,12 @@
 package de.alpha_zone.teachersstopwatch;
 
+import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.widget.ProgressBar
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Matchers.any
@@ -11,8 +14,10 @@ import org.mockito.Matchers.anyInt
 import org.mockito.Matchers.anyLong
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Deque
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
@@ -29,6 +34,25 @@ class CountDownTickerTest {
 		countdownTicker.start()
 		emulateHandlerWork(queue)
 		assertThat(countdown.secondsToFinish, `is`(0))
+	}
+
+	@Test
+	fun when_count_down_is_on_timer_broadcast_is_fired() {
+		val (queue, mockHandler) = createHandlerMock()
+		val countdown = CountDown(2.toDuration(DurationUnit.SECONDS))
+		val context = mock(Context::class.java)
+		val intentReference: AtomicReference<Intent> = AtomicReference()
+		`when`(context.sendBroadcast(any(Intent::class.java))).thenAnswer { invocation ->
+			val argument = invocation.getArgumentAt(0, Intent::class.java)
+			intentReference.set(argument)
+			null
+		}
+		val countdownTicker = CountDownTicker(mockHandler, countdown, context)
+		countdownTicker.start()
+		emulateHandlerWork(queue)
+		val intent = intentReference.get()
+		assertThat(intent, `is`(not(nullValue())))
+		assertThat(intent.getIntExtra(CountDownScheduler.NOTIFICATION_NAME, -1), `is`(not(-1)))
 	}
 
 	@Test

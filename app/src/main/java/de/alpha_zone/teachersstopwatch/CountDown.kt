@@ -2,6 +2,7 @@ package de.alpha_zone.teachersstopwatch
 
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.math.max
 import kotlin.math.roundToLong
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -13,9 +14,9 @@ class CountDown(duration: Duration, private val cycles: Int = 1) {
 	private var _start: LocalDateTime? = null
 	val start: LocalDateTime? get() = _start
 
-	private val _times: MutableList<LocalDateTime> = mutableListOf()
-	val timers: List<LocalDateTime> get() = _times
-	val unfinishedTimers: List<LocalDateTime> get() = _times.filter { it.isAfter(LocalDateTime.now()) }
+	private val _times: MutableList<Pair<Int,LocalDateTime>> = mutableListOf()
+	val timers: List<Pair<Int,LocalDateTime>> get() = _times
+	val unfinishedTimers: List<Pair<Int,LocalDateTime>> get() = _times.filter { it.second.isAfter(LocalDateTime.now()) }
 
 	private var _secondsPassed = 0L
 	val secondsPassed: Long get() = _secondsPassed
@@ -23,10 +24,12 @@ class CountDown(duration: Duration, private val cycles: Int = 1) {
 	val secondsToFinish: Long get() = _secondsToFinish
 	private var _finished = true
 	val finished: Boolean get() = _finished
-	val notFinished: Boolean get() = !finished;
+	val notFinished: Boolean get() = !finished
+	val onTimer: Boolean get() = secondsPassed > 0 && interval > 0L && secondsPassed % interval == 0L
 
-	val cyclesDone: Double get() = secondsPassed.toCycleRelative(interval, cycles)
-	val cycleDone: Double get() = secondsPassed.toInnerCycleRelative(interval)
+	val cycle: Int get() = secondsPassed.toCycle(interval).toInt()
+	val cyclesDone: Double get() = if (finished) 100.0 else secondsPassed.toCycleRelative(interval, cycles)
+	val cycleDone: Double get() = if (finished) 100.0 else secondsPassed.toInnerCycleRelative(interval)
 
 	private var _syncCount = 0L
 	val syncCount: Long get() = _syncCount
@@ -35,16 +38,15 @@ class CountDown(duration: Duration, private val cycles: Int = 1) {
 		val now = LocalDateTime.now()
 		_start = now
 		for (i in 1..cycles) {
-			_times.add(now.plusSeconds(interval * i))
+			_times.add(Pair(i, now.plusSeconds(interval * i)))
 		}
 	}
 
 	fun sync(syncTime: LocalDateTime = LocalDateTime.now()) {
 		_syncCount++
-		val start = _start
-		if (start != null) {
-			_secondsPassed = (start.until(syncTime, ChronoUnit.MILLIS).toDouble() / 1000).roundToLong()
-			_secondsToFinish = (interval * cycles) - _secondsPassed
+		_start?.let {
+			_secondsPassed = (it.until(syncTime, ChronoUnit.MILLIS).toDouble() / 1000).roundToLong()
+			_secondsToFinish = max(0, (interval * cycles) - _secondsPassed)
 			_finished = secondsToFinish <= 0;
 		}
 	}

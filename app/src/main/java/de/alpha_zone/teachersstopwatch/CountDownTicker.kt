@@ -1,5 +1,7 @@
 package de.alpha_zone.teachersstopwatch
 
+import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.widget.ProgressBar
 import java.util.concurrent.TimeUnit
@@ -7,7 +9,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
 @ExperimentalTime
-class CountDownTicker(private val handler: Handler, private val countDown: CountDown) : Runnable {
+class CountDownTicker(private val handler: Handler, val countDown: CountDown, private val context: Context? = null) : Runnable {
 
 	private val delay = 1.toDuration(TimeUnit.SECONDS).toLongMilliseconds()
 	private var tickBar: ProgressBar? = null
@@ -37,8 +39,14 @@ class CountDownTicker(private val handler: Handler, private val countDown: Count
 		countDown.sync()
 		repeatBar?.progress = countDown.cyclesDone.toInt()
 		tickBar?.progress = countDown.cycleDone.toInt()
+		val cycle = countDown.cycle
 		if (countDown.notFinished) {
 			handler.postDelayed(this, delay)
+		}
+		if (countDown.onTimer) {
+			val intent = Intent(Notifier.TIMEOUT_ACTION)
+			intent.putExtra(CountDownScheduler.NOTIFICATION_NAME, cycle)
+			context?.sendBroadcast(intent)
 		}
 	}
 

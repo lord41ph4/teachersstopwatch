@@ -32,7 +32,7 @@ class CountDownTest {
 		val countDown = CountDown(20.toDuration(DurationUnit.SECONDS), cycles)
 		countDown.start()
 		val startTime = countDown.start!!
-		assertThat(countDown.timers, containsInAnyOrder(startTime.plusSeconds(20L), startTime.plusSeconds(40L)))
+		assertThat(countDown.timers, containsInAnyOrder(Pair(1, startTime.plusSeconds(20L)), Pair(2, startTime.plusSeconds(40L))))
 	}
 
 	@Test
@@ -79,6 +79,7 @@ class CountDownTest {
 	fun second_3_of_cycle_with_interval_of_3_lies_is_3() {
 		assertThat(3.toInnerCycle(3), `is`(3L))
 	}
+
 	@Test
 	fun second_4_of_cycle_with_interval_of_3_lies_is_1() {
 		assertThat(4.toInnerCycle(3), `is`(1L))

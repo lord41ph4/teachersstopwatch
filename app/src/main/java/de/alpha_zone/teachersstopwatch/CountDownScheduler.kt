@@ -24,10 +24,13 @@ class CountDownScheduler(private val countDown: CountDown) {
 		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
 		if (alarmManager != null) {
 			for (requestCode in unfinished.indices) {
+				val elapsedRealtime = SystemClock.elapsedRealtime()
+				val (index, dateTime) = unfinished[requestCode]
+				val millis = LocalDateTime.now().until(dateTime, ChronoUnit.MILLIS)
+				val time = elapsedRealtime + millis
 				val intent = Intent(Notifier.TIMEOUT_ACTION)
+				intent.putExtra(NOTIFICATION_NAME, index)
 				val alarmIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
-				val millis = LocalDateTime.now().until(unfinished[requestCode], ChronoUnit.MILLIS)
-				val time = SystemClock.elapsedRealtime() + millis
 				alarmManager.setExact(
 						AlarmManager.ELAPSED_REALTIME,
 						time,
